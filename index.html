@@ -613,19 +613,23 @@
     }
 
     function startFirestoreListener() {
-      const q = query(
-        collection(db, "tugas"),
-        orderBy("createdAt", "desc")
-      );
+    const q = query(
+      collection(db, "tugas"),
+      orderBy("alamat", "asc")
+    );
 
-      onSnapshot(q, (snapshot) => {
-        allData = [];
-        snapshot.forEach((d) => {
-          allData.push({ id: d.id, ...d.data() });
-        });
-        renderTable(allData);
+    onSnapshot(q, (snapshot) => {
+      allData = [];
+      snapshot.forEach((d) => {
+        allData.push({ id: d.id, ...d.data() });
       });
-    }
+      renderTable(allData);
+    }, (error) => {
+      console.log(error);
+      document.getElementById("table-wrapper").innerHTML =
+        `<div class="loading-container">Gagal memuat data</div>`;
+    });
+}
 
     function bindSearchFilter() {
       document.getElementById("searchInput")
